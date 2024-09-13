@@ -28,14 +28,12 @@ class CompanyTableViewCell: UITableViewCell {
                 cityLabel.text = data.city
                 streetLabel.text = data.street
                 typeOfActivityLabel.text = data.typeOfActivity
-//                photoImageView.image = data.photoURL
             case .type2:
                 // Настройте для типа 2
                 nameLabel.text = data.name
                 cityLabel.text = data.city
                 streetLabel.text = data.street
                 typeOfActivityLabel.text = data.typeOfActivity
-//                photoImageView.image = data.photoURL
             }
         }
 

@@ -40,7 +40,6 @@ class CompanyTableViewController: UITableViewController {
 //        companyArray.append(test2)
 //        tableView.reloadData()
         
-//        APIrequest()
         fetchAllCompanies()
     }
     
@@ -92,6 +91,7 @@ class CompanyTableViewController: UITableViewController {
             cell.setData(for: cellType, with: companyArray[indexPath.row])
         }
         
+        // Setup logo image
         let logoURL = logosArray[indexPath.row]
         cell.photoImageView.sd_setImage(with: URL(string: logoURL), placeholderImage: UIImage.appleLogo)
         
@@ -107,35 +107,33 @@ class CompanyTableViewController: UITableViewController {
             }
     }
     
-// MARK: Functoins
-    
-    func getLogoURL(forCompanyAt index: Int) -> URL? {
-        let logoURLString = logosArray[index]
-        return URL(string: logoURLString)
-    }
-    
 // MARK: Fetching API data
     func fetchAllCompanies() {
-            let dispatchGroup = DispatchGroup()
+        let dispatchGroup = DispatchGroup()
+        
+        for cikCode in cikCodesArray {
+            dispatchGroup.enter()
             
-            for cikCode in cikCodesArray {
-                dispatchGroup.enter()
-                
-                APIrequest(cikCode: cikCode) { company in
-                    if let company = company {
-                        self.cikToCompanyMap[cikCode] = company
-                    }
-                    dispatchGroup.leave()
+            APIrequest(cikCode: cikCode) { company in
+                if let company = company {
+                    self.cikToCompanyMap[cikCode] = company
                 }
-            }
-            
-            dispatchGroup.notify(queue: .main) {
-                self.companyArray = self.cikCodesArray.compactMap { self.cikToCompanyMap[$0] }
-                self.tableView.reloadData()
-                
-                SVProgressHUD.dismiss()
+                dispatchGroup.leave()
             }
         }
+        
+        dispatchGroup.notify(queue: .main) {
+            let newCompanyArray = self.cikCodesArray.compactMap { cikCode in
+                let mappedCompany = self.cikToCompanyMap[cikCode]
+                return mappedCompany
+            }
+            self.companyArray = newCompanyArray
+            
+            self.tableView.reloadData()
+            
+            SVProgressHUD.dismiss()
+        }
+    }
         
     func APIrequest(cikCode: String, completion: @escaping (CompanyModel?) -> Void) {
         

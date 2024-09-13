@@ -14,7 +14,7 @@ struct NetIncomeLoss {
     var entityName: String = ""
     var listYear: [Int] = []
     var listValue: [Int] = []
-    var yearlyValues: [Int: Int] = [:]
+    var yearlyValues: [Int: Double] = [:]
     
     init() {}
     
@@ -44,7 +44,7 @@ struct NetIncomeLoss {
         
         if let unitsArray = json["units"]["USD"].array {
             for unit in unitsArray {
-                if let year = unit["fy"].int, let value = unit["val"].int {
+                if let year = unit["fy"].int, let value = unit["val"].double {
                     // Суммируем значения для одного года
                     yearlyValues[year, default: 0] += value
                 }
@@ -59,7 +59,7 @@ struct GrossProfit {
     var description: String = ""
     var listYear: [Int] = []
     var listValue: [Int] = []
-    var yearlyValues: [Int: Int] = [:]
+    var yearlyValues: [Int: Double] = [:]
     
     init() {}
     
@@ -74,7 +74,7 @@ struct GrossProfit {
         
         if let unitsArray = json["units"]["USD"].array {
             for unit in unitsArray {
-                if let year = unit["fy"].int, let value = unit["val"].int {
+                if let year = unit["fy"].int, let value = unit["val"].double {
                     // Суммируем значения для одного года
                     yearlyValues[year, default: 0] += value
                 }
@@ -89,7 +89,7 @@ struct OperatingIncomeLoss {
     var description: String = ""
     var listYear: [Int] = []
     var listValue: [Int] = []
-    var yearlyValues: [Int: Int] = [:]
+    var yearlyValues: [Int: Double] = [:]
     
     init() {}
     
@@ -104,7 +104,7 @@ struct OperatingIncomeLoss {
         
         if let unitsArray = json["units"]["USD"].array {
             for unit in unitsArray {
-                if let year = unit["fy"].int, let value = unit["val"].int {
+                if let year = unit["fy"].int, let value = unit["val"].double {
                     // Суммируем значения для одного года
                     yearlyValues[year, default: 0] += value
                 }
